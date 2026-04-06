@@ -1,0 +1,6 @@
+@TopGear_HostAddress = http://localhost:5168
+
+GET {{TopGear_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
