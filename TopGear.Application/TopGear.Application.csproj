@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TopGear.Domain\TopGear.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

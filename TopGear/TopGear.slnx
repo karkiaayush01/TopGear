@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="../TopGear.Application/TopGear.Application.csproj" />
+  <Project Path="../TopGear.Domain/TopGear.Domain.csproj" />
+  <Project Path="../TopGear.Infrastructure/TopGear.Infrastructure.csproj" />
   <Project Path="TopGear.csproj" />
 </Solution>

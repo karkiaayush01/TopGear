@@ -78,6 +78,3 @@ out/
 ## Logs
 *.log
 logs/
-
-## Hide appsettings.json and replace with sample
-appsettings.json
