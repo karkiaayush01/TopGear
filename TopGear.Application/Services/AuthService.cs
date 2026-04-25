@@ -25,6 +25,7 @@ public class AuthService: IAuthService
         {
             FirstName = data.FirstName,
             LastName = data.LastName,
+            UserName = data.Email,
             Email = data.Email,
             PhoneNumber = data.PhoneNumber
         };

@@ -17,6 +17,10 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+//Add Swagger too for quick testing
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // Jwt configuration
 var jwtConfig = builder.Configuration.GetSection(JwtOptions.SectionName);
 builder.Services.AddOptions<JwtOptions>()
@@ -70,6 +74,8 @@ app.UseMiddleware<GlobalExceptionHandler>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
