@@ -1,31 +1,28 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TopGear.Domain.Enums;
 
-namespace TopGear.Domain.Entities;
+namespace TopGear.Application.DTOs.PartsDTO;
 
-public class Part
+public class CreatePartDTO
 {
-    public Guid PartId { get; set; } = Guid.NewGuid();
-
     [Required]
     public string PartName { get; set; } = null!;
 
     [Range(0, double.MaxValue)]
-
-    [Required]
     public decimal PartPrice { get; set; }
 
-    [Range(0, double.MaxValue)]
+    [Range(0, int.MaxValue)]
     public int Quantity { get; set; }
 
+    [Required]
     public Guid VendorId { get; set; }
 
+    [Required]
     public string Description { get; set; } = null!;
-    public VehicleType VehicleType { get; set; }
-    public string ImageUrl { get; set; } = null!;
-    public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    public Vendor Vendor { get; set; } = null!;
+    public VehicleType VehicleType { get; set; }
+
+    [Required]
+    public string ImageUrl { get; set; } = null!;
+
 }

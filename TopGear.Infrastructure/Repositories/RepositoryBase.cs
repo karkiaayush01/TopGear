@@ -24,10 +24,10 @@ public class RepositoryBase<T>(AppDbContext context) : IRepositoryBase<T> where 
             ? Context.Set<T>().Where(expression).AsNoTracking()
             : Context.Set<T>().Where(expression);
 
-    public T? GetById(int id) => Context.Set<T>().Find(id);
+    public T? GetById(Guid id) => Context.Set<T>().Find(id);
 
 
-    public async Task<T?> GetByIdAsync(int id) => await Context.Set<T>().FindAsync(id);
+    public async Task<T?> GetByIdAsync(Guid id) => await Context.Set<T>().FindAsync(id);
 
     public async Task<bool> GetExistenceAsync(Expression<Func<T, bool>> expression) => await Context.Set<T>().AnyAsync(expression);
 
