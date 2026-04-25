@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TopGear.Application.Interfaces;
 using TopGear.Application.Services;
 using TopGear.Infrastructure.Data;
+using TopGear.Infrastructure.Repositories;
 
 namespace TopGear.Infrastructure;
 
@@ -15,7 +16,12 @@ public static class DependencyInjections
             options.UseNpgsql(configuration.GetConnectionString("Postgres")));
         services.AddScoped<AppDbSeeder>();
 
+        //repository injections
+        services.AddScoped<IPartRepository, PartRepository>();
+
+        //services injections
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IPartService, PartService>();
 
         return services;
     }

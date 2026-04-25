@@ -7,8 +7,8 @@ public interface IRepositoryBase<T>
     IQueryable<T> FindAll(bool trackChanges = false);
     Task<List<T>> FindAllAsync(bool trackChanges = false);
     IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false);
-    T? GetById(int id);
-    Task<T?> GetByIdAsync(int id);
+    T? GetById(Guid id);
+    Task<T?> GetByIdAsync(Guid id);
     Task<bool> GetExistenceAsync(Expression<Func<T, bool>> expression);
     void Create(T entity);
     void Update(T entity);
