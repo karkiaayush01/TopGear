@@ -20,6 +20,7 @@ public static class DependencyInjections
         services.AddScoped<IPartRepository, PartRepository>();
 
         //services injections
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPartService, PartService>();
 
