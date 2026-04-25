@@ -1,0 +1,62 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using TopGear.Application.DTOs.UserDTO;
+using TopGear.Application.Interfaces;
+using TopGear.Domain.Entities;
+
+namespace TopGear.Application.Services;
+
+public class AuthService: IAuthService
+{
+    private readonly UserManager<User> _userManager;
+    private readonly ILogger<AuthService> _logger;
+
+    public AuthService(UserManager<User> userManager, ILogger<AuthService> logger)
+    {
+        _userManager = userManager;
+        _logger = logger;
+    }
+
+    public async Task<Guid> CreateAccount(RegisterDTO data, string role)
+    {
+        _logger.LogInformation("Creating user object");
+
+        var user = new User
+        {
+            FirstName = data.FirstName,
+            LastName = data.LastName,
+            Email = data.Email,
+            PhoneNumber = data.PhoneNumber
+        };
+
+        _logger.LogInformation("Adding user with User Manager");
+
+        var result = await _userManager.CreateAsync(user, data.Password);
+
+        if (!result.Succeeded) {
+            _logger.LogWarning("User creation failed for {Email}. Errors: {Errors}",
+                data.Email,
+                result.Errors.Select(e => e.Description)
+            );
+
+            var errorMessage = string.Join("; ", result.Errors.Select(e => e.Description));
+
+            throw new ArgumentException($"User creation failed: {errorMessage}");
+        };
+
+        _logger.LogInformation("Created User {UserId}! Now Creating Roles", user.Id);
+        var roleResult = await _userManager.AddToRoleAsync(user, role);
+        if (!roleResult.Succeeded)
+        {
+            _logger.LogWarning("Role creation failed. Errors: {Errors}",
+                roleResult.Errors.Select(e => e.Description)
+            );
+
+            var errorMessage = string.Join("; ", roleResult.Errors.Select(e => e.Description));
+
+            throw new ArgumentException($"Role assignment failed: {errorMessage}");
+        };
+
+        return user.Id;
+    }
+}

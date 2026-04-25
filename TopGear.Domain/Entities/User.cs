@@ -10,4 +10,5 @@ public class User: IdentityUser<Guid>
 
     [StringLength(255)]
     public string LastName { get; set; } = null!;
+    public string? ImageUrl { get; set; }
 }
