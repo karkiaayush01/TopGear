@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TopGear.Infrastructure.Data;
@@ -11,9 +12,11 @@ using TopGear.Infrastructure.Data;
 namespace TopGear.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260425132841_PartsMangement")]
+    partial class PartsMangement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,52 +156,6 @@ namespace TopGear.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", "topgear");
                 });
 
-            modelBuilder.Entity("TopGear.Domain.Entities.Part", b =>
-                {
-                    b.Property<Guid>("PartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("PartName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("PartPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("VehicleType")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("VendorId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("PartId");
-
-                    b.HasIndex("VendorId");
-
-                    b.ToTable("Parts", "topgear");
-                });
-
             modelBuilder.Entity("TopGear.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -274,17 +231,6 @@ namespace TopGear.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", "topgear");
                 });
 
-            modelBuilder.Entity("TopGear.Domain.Entities.Vendor", b =>
-                {
-                    b.Property<Guid>("VendorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.HasKey("VendorId");
-
-                    b.ToTable("Vendors", "topgear");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -334,17 +280,6 @@ namespace TopGear.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TopGear.Domain.Entities.Part", b =>
-                {
-                    b.HasOne("TopGear.Domain.Entities.Vendor", "Vendor")
-                        .WithMany()
-                        .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Vendor");
                 });
 #pragma warning restore 612, 618
         }
