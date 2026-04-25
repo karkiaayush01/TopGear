@@ -11,6 +11,7 @@ public static class DependencyInjections
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("Postgres")));
+        services.AddScoped<AppDbSeeder>();
 
         return services;
     }
