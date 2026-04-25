@@ -5,6 +5,7 @@ using TopGear.Infrastructure;
 using TopGear.Infrastructure.Auth;
 using TopGear.Infrastructure.Data;
 using TopGear.Middleware;
+using Serilog;
 
 // Preserves the claim as it came from token instead of Microsoft's Mapping Standards
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -64,6 +65,17 @@ builder.Services.AddAuthentication()
 builder.Services.AddAuthorization();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// Logging configuration: Log using Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console(outputTemplate:
+        "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .WriteTo.Debug(outputTemplate:
+        "[{Timestamp:HH:mm:ss.fff}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 

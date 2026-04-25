@@ -10,11 +10,13 @@ public class AuthService: IAuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly ILogger<AuthService> _logger;
+    private readonly IJwtTokenService _jwtTokenService;
 
-    public AuthService(UserManager<User> userManager, ILogger<AuthService> logger)
+    public AuthService(UserManager<User> userManager, ILogger<AuthService> logger, IJwtTokenService jwtTokenService)
     {
         _userManager = userManager;
         _logger = logger;
+        _jwtTokenService = jwtTokenService;
     }
 
     public async Task<Guid> CreateAccount(RegisterDTO data, string role)
@@ -59,5 +61,24 @@ public class AuthService: IAuthService
         };
 
         return user.Id;
+    }
+
+    public async Task<LoginResponseDTO?> Login(LoginDTO request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null) return null;
+
+        var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+        if (!isPasswordValid) return null;
+
+        var token = await _jwtTokenService.GenerateUserToken(user);
+
+        return new LoginResponseDTO
+        {
+            AccessToken = token,
+            UserId = user.Id,
+            Email = user.Email ?? "",
+            Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault() ?? ""
+        };
     }
 }
