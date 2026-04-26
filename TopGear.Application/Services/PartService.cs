@@ -18,13 +18,14 @@ public class PartService: IPartService
     {
         _logger.LogInformation("Fetching all parts");
 
-        var parts = await _repository.FindAllAsync();
+        var parts = await _repository. FindAllAsync();
 
         return parts.Select(p => new PartDTO
         {
             PartId = p.PartId,
             PartName = p.PartName,
-            PartPrice = p.PartPrice,
+            PartPrice = p.PurchasePrice,
+            SellingPrice = p.SellingPrice,
             Quantity = p.Quantity,
             VendorId = p.VendorId,
             VendorName = p.Vendor?.VendorName ?? "",
@@ -50,7 +51,8 @@ public class PartService: IPartService
         {
             PartId = part.PartId,
             PartName = part.PartName,
-            PartPrice = part.PartPrice,
+            PartPrice = part.PurchasePrice,
+            SellingPrice = part.SellingPrice,
             Quantity = part.Quantity,
             VendorId = part.VendorId,
             VendorName = part.Vendor?.VendorName ?? "",
@@ -69,7 +71,8 @@ public class PartService: IPartService
             var newPart = new Part
             {
                 PartName = dto.PartName,
-                PartPrice = dto.PartPrice,
+                PurchasePrice = dto.PartPrice,
+                SellingPrice = dto.SellingPrice,
                 Quantity = dto.Quantity,
                 VendorId = dto.VendorId,
                 Description = dto.Description,
@@ -89,7 +92,8 @@ public class PartService: IPartService
             {
                 PartId = newPart.PartId,
                 PartName = newPart.PartName,
-                PartPrice = newPart.PartPrice,
+                PartPrice = newPart.PurchasePrice,
+                SellingPrice = newPart.SellingPrice,
                 Quantity = newPart.Quantity,
                 VendorId = newPart.VendorId,
                 Description = newPart.Description,
@@ -117,7 +121,7 @@ public class PartService: IPartService
         }
 
         part.PartName = string.IsNullOrWhiteSpace(dto.PartName) ? part.PartName : dto.PartName;
-        part.PartPrice = dto.PartPrice ?? part.PartPrice;
+        part.PurchasePrice = dto.PartPrice ?? part.PurchasePrice;
         part.VendorId = dto.VendorId ?? part.VendorId;
         part.Description = string.IsNullOrWhiteSpace(dto.Description) ? part.Description : dto.Description;
         part.VehicleType = dto.VehicleType ?? part.VehicleType;
@@ -133,7 +137,8 @@ public class PartService: IPartService
         {
             PartId = part.PartId,
             PartName = part.PartName,
-            PartPrice = part.PartPrice,
+            PartPrice = part.PurchasePrice,
+            SellingPrice = part.SellingPrice,
             VendorId = part.VendorId,
             Description = part.Description,
             VehicleType = part.VehicleType,

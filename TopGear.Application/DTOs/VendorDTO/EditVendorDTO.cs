@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
-namespace TopGear.Domain.Entities;
+namespace TopGear.Application.DTOs.VendorDTO;
 
-public class Vendor
+public class EditVendorDTO
 {
-    public Guid VendorId { get; set; } = Guid.NewGuid();
+    [Required]
+    public Guid VendorId { get; set; }
 
     [Required]
     [MaxLength(100)]
@@ -25,11 +27,5 @@ public class Vendor
     [MaxLength(100)]
     public string? ContactPerson { get; set; }
 
-    public bool IsActive { get; set; } = true;
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-    ICollection<Part> VendorParts { get; set; } = new List<Part>();
+    public bool IsActive { get; set; }
 }

@@ -1,11 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TopGear.Domain.Entities;
-
-public class Vendor
+public class CreateVendorDTO
 {
-    public Guid VendorId { get; set; } = Guid.NewGuid();
-
     [Required]
     [MaxLength(100)]
     public string VendorName { get; set; } = string.Empty;
@@ -24,12 +20,4 @@ public class Vendor
 
     [MaxLength(100)]
     public string? ContactPerson { get; set; }
-
-    public bool IsActive { get; set; } = true;
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-    ICollection<Part> VendorParts { get; set; } = new List<Part>();
 }

@@ -13,7 +13,10 @@ public class Part
 
     [Range(0, double.MaxValue)]
     [Required]
-    public decimal PartPrice { get; set; }
+    public decimal PurchasePrice { get; set; }
+
+    [Range(0, double.MaxValue)]
+    public decimal SellingPrice { get; set; } = 0m;
 
     [Range(0, double.MaxValue)]
     public int Quantity { get; set; }
@@ -30,4 +33,9 @@ public class Part
 
     [ForeignKey(nameof(VendorId))]
     public Vendor Vendor { get; set; } = null!;
+
+    //Purchase Price, Selling Price
+
+
+    //Invoice ma partid Unit price() Quantity, Vendor Detail
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TopGear.Infrastructure.Data;
@@ -11,9 +12,11 @@ using TopGear.Infrastructure.Data;
 namespace TopGear.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260426091443_AddedVendorEntity")]
+    partial class AddedVendorEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,40 +202,6 @@ namespace TopGear.Infrastructure.Migrations
                     b.ToTable("Parts", "topgear");
                 });
 
-            modelBuilder.Entity("TopGear.Domain.Entities.ServiceAppointment", b =>
-                {
-                    b.Property<Guid>("AppointmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("AppointmentDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("VehicleType")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AppointmentId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("ServiceAppointments", "topgear");
-                });
-
             modelBuilder.Entity("TopGear.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -414,17 +383,6 @@ namespace TopGear.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Vendor");
-                });
-
-            modelBuilder.Entity("TopGear.Domain.Entities.ServiceAppointment", b =>
-                {
-                    b.HasOne("TopGear.Domain.Entities.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
                 });
 #pragma warning restore 612, 618
         }

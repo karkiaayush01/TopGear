@@ -11,6 +11,9 @@ public class CreatePartDTO
     [Range(0, double.MaxValue)]
     public decimal PartPrice { get; set; }
 
+    [Range(0, double.MaxValue)]
+    public decimal SellingPrice { get; set; }
+
     [Range(0, int.MaxValue)]
     public int Quantity { get; set; }
 
