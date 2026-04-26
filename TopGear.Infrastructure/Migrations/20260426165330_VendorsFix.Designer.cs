@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TopGear.Infrastructure.Data;
@@ -11,9 +12,11 @@ using TopGear.Infrastructure.Data;
 namespace TopGear.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260426165330_VendorsFix")]
+    partial class VendorsFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,36 +156,6 @@ namespace TopGear.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", "topgear");
                 });
 
-            modelBuilder.Entity("TopGear.Domain.Entities.ForgotPasswordRequest", b =>
-                {
-                    b.Property<Guid>("RequestId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("VerificationCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("RequestId");
-
-                    b.HasIndex("UserEmail");
-
-                    b.ToTable("ForgotPasswordRequests", "topgear");
-                });
-
             modelBuilder.Entity("TopGear.Domain.Entities.Part", b =>
                 {
                     b.Property<Guid>("PartId")
@@ -207,7 +180,6 @@ namespace TopGear.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("PurchasePrice")
                     b.Property<decimal>("PurchasePrice")
                         .HasColumnType("numeric");
 
@@ -280,47 +252,6 @@ namespace TopGear.Infrastructure.Migrations
                     b.HasIndex("PurchaseInvoiceId");
 
                     b.ToTable("PurchaseInvoiceItems", "topgear");
-                });
-
-            modelBuilder.Entity("TopGear.Domain.Entities.Review", b =>
-                {
-                    b.Property<Guid>("ReviewId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("AppointmentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("PartId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ReviewType")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("ReviewId");
-
-                    b.HasIndex("AppointmentId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("PartId");
-
-                    b.ToTable("Reviews", "topgear");
                 });
 
             modelBuilder.Entity("TopGear.Domain.Entities.ServiceAppointment", b =>
@@ -568,29 +499,6 @@ namespace TopGear.Infrastructure.Migrations
                     b.Navigation("Part");
 
                     b.Navigation("PurchaseInvoice");
-                });
-
-            modelBuilder.Entity("TopGear.Domain.Entities.Review", b =>
-                {
-                    b.HasOne("TopGear.Domain.Entities.ServiceAppointment", "Appointment")
-                        .WithMany()
-                        .HasForeignKey("AppointmentId");
-
-                    b.HasOne("TopGear.Domain.Entities.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TopGear.Domain.Entities.Part", "Part")
-                        .WithMany()
-                        .HasForeignKey("PartId");
-
-                    b.Navigation("Appointment");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Part");
                 });
 
             modelBuilder.Entity("TopGear.Domain.Entities.ServiceAppointment", b =>
