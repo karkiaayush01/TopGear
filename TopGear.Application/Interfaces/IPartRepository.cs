@@ -1,5 +1,4 @@
-﻿
-using TopGear.Domain.Entities;
+﻿using TopGear.Domain.Entities;
 
 namespace TopGear.Application.Interfaces;
 

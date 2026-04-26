@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using TopGear.Application.DTOs.CustomerDTO;
 using TopGear.Application.Interfaces;
 
-
 namespace TopGear.Controllers
 {
 
