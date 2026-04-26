@@ -1,11 +1,15 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.OpenApi;
+using Serilog;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using TopGear.Domain.Entities;
 using TopGear.Infrastructure;
 using TopGear.Infrastructure.Auth;
 using TopGear.Infrastructure.Data;
 using TopGear.Middleware;
-using Serilog;
 
 // Preserves the claim as it came from token instead of Microsoft's Mapping Standards
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -20,7 +24,25 @@ builder.Services.AddOpenApi();
 
 //Add Swagger too for quick testing
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "Enter JWT token only. Do not write Bearer manually."
+    });
+
+    options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer"),
+            new List<string>()
+        }
+    });
+});
+
 
 // Jwt configuration
 var jwtConfig = builder.Configuration.GetSection(JwtOptions.SectionName);
@@ -40,7 +62,7 @@ builder.Services
     .AddDefaultTokenProviders();
 
 // Authentication
-builder.Services.AddAuthentication()
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         var jwtOptions = jwtConfig.Get<JwtOptions>() ?? throw new InvalidOperationException("Jwt Configuration is missing");
@@ -92,6 +114,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -105,3 +128,40 @@ await seeder.SeedRolesAsync();
 */
 
 app.Run();
+
+// Swagger lock filter
+public class AuthorizeOperationFilter : IOperationFilter
+{
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    {
+        // Check for [Authorize] on the action or controller
+        var hasAuthorize = context.MethodInfo
+            .GetCustomAttributes(true)
+            .OfType<AuthorizeAttribute>()
+            .Any()
+            || context.MethodInfo.DeclaringType!
+            .GetCustomAttributes(true)
+            .OfType<AuthorizeAttribute>()
+            .Any();
+
+        // Check for [AllowAnonymous] — it overrides [Authorize]
+        var hasAllowAnonymous = context.MethodInfo
+            .GetCustomAttributes(true)
+            .OfType<AllowAnonymousAttribute>()
+            .Any();
+
+        if (!hasAuthorize || hasAllowAnonymous)
+            return;
+
+        operation.Security = new List<OpenApiSecurityRequirement>
+        {
+            new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecuritySchemeReference("Bearer"),
+                    new List<string>()
+                }
+            }
+        };
+    }
+}
