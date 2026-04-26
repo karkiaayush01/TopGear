@@ -28,19 +28,15 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
+        In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
+        Name = "Authorization",
         Scheme = "bearer",
         BearerFormat = "JWT",
         Description = "Enter JWT token only. Do not write Bearer manually."
     });
 
-    options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecuritySchemeReference("Bearer"),
-            new List<string>()
-        }
-    });
+    options.OperationFilter<AuthorizeOperationFilter>();
 });
 
 
@@ -129,12 +125,11 @@ await seeder.SeedRolesAsync();
 
 app.Run();
 
-// Swagger lock filter
+// Swagger UI: Add Lock options for Authorize Endpoints and leave for anonymous
 public class AuthorizeOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        // Check for [Authorize] on the action or controller
         var hasAuthorize = context.MethodInfo
             .GetCustomAttributes(true)
             .OfType<AuthorizeAttribute>()
@@ -144,24 +139,20 @@ public class AuthorizeOperationFilter : IOperationFilter
             .OfType<AuthorizeAttribute>()
             .Any();
 
-        // Check for [AllowAnonymous] — it overrides [Authorize]
         var hasAllowAnonymous = context.MethodInfo
             .GetCustomAttributes(true)
             .OfType<AllowAnonymousAttribute>()
             .Any();
 
         if (!hasAuthorize || hasAllowAnonymous)
-            return;
-
-        operation.Security = new List<OpenApiSecurityRequirement>
         {
-            new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecuritySchemeReference("Bearer"),
-                    new List<string>()
-                }
-            }
-        };
+            // No lock for default endpoints with no authrize or anonymous
+            operation.Security = new List<OpenApiSecurityRequirement>();
+            return;
+        }
+
+        var requirement = new OpenApiSecurityRequirement();
+        requirement.Add(new OpenApiSecuritySchemeReference("Bearer", context.Document), new List<string>());
+        operation.Security = new List<OpenApiSecurityRequirement> { requirement };
     }
 }
