@@ -1,14 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TopGear.Application.DTOs.EmailDTO;
 using TopGear.Application.DTOs.UserDTO;
+using TopGear.Application.DTOs.ForgotPasswordDTO;
+using TopGear.Application.Utils;
 using TopGear.Application.Interfaces;
 
 namespace TopGear.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(IAuthService authService) : ControllerBase
+public class AuthController : ControllerBase
 {
+    private readonly IAuthService _authService;
+    private readonly IEmailService _emailService;
+    private readonly IUserService _userService;
+    private readonly IForgotPasswordService _forgotPasswordService;
+
+    public AuthController(IAuthService authService, IEmailService emailService, IUserService userService, IForgotPasswordService forgotPasswordService)
+    {
+        _authService = authService;
+        _emailService = emailService;
+        _userService = userService;
+        _forgotPasswordService = forgotPasswordService;
+    }
+
+
     /// <summary>
     /// Self Signup Endpoint for a customer
     /// </summary>
@@ -16,7 +33,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpPost("signup")]
     public async Task<IActionResult> SelfRegisterCustomer([FromBody] RegisterDTO data)
     {
-        Guid userId = await authService.CreateAccount(data, "Customer");
+        Guid userId = await _authService.CreateAccount(data, "Customer");
         return Ok(new
         {
             Message = "Customer registered successfully",
@@ -31,10 +48,53 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {
-        LoginResponseDTO? response = await authService.Login(request);
+        LoginResponseDTO? response = await _authService.Login(request);
 
         if (response == null) return Unauthorized("Invalid Credentials");
 
         return Ok(response);
     }
+
+    /// <summary>
+    /// Send Forgot Password Email
+    /// </summary>
+    [AllowAnonymous]
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> SendForgotPasswordEmail(string email)
+    {
+        if (!ValidationUtils.IsValidEmail(email)) throw new ArgumentException("Invalid email. Please provide a valid email.");
+
+        bool exists = await _userService.CheckUserExistsByEmail(email);
+
+        if (exists)
+        {
+            var request = await _forgotPasswordService.CreateRequest(email);
+
+            await _emailService.SendMailAsync(new SendEmailDTO
+            {
+                Recipients = new List<string> { email },
+                Subject = "Your Forgot Password Request",
+                Body = $"Your code is {request.VerificationCode}",
+                IsHtml = false
+            });
+        }
+
+        return Ok(new
+        {
+            Message = "If the email is registered, an email with verification code has been sent"
+        });
+    }
+
+    /// <summary>
+    /// Reset a password using verification code
+    /// </summary>
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO request)
+    {
+        await _forgotPasswordService.ResetPassword(request);
+
+        return Ok("Password Reset Successfully");
+    }
+
 }

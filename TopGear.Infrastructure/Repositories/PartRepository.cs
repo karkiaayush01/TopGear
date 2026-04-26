@@ -1,6 +1,4 @@
-﻿
-
-using TopGear.Application.Interfaces;
+﻿using TopGear.Application.Interfaces;
 using TopGear.Domain.Entities;
 using TopGear.Infrastructure.Data;
 

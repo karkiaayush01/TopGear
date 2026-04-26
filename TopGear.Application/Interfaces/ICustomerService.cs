@@ -1,4 +1,4 @@
-﻿ using TopGear.Application.DTOs.CustomerDTO;
+﻿using TopGear.Application.DTOs.CustomerDTO;
 
 
 namespace TopGear.Application.Interfaces

@@ -1,6 +1,4 @@
-﻿
-
-using TopGear.Application.DTOs.PartsDTO;
+﻿using TopGear.Application.DTOs.PartsDTO;
 
 namespace TopGear.Application.Interfaces;
 
