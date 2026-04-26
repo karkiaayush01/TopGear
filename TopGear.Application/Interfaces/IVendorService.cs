@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TopGear.Application.DTOs.PartsDTO;
-using TopGear.Application.DTOs.VendorDTO;
+﻿using TopGear.Application.DTOs.VendorDTO;
 
 namespace TopGear.Application.Interfaces;
 

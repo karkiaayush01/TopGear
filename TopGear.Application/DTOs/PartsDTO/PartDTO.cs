@@ -6,7 +6,7 @@ public class PartDTO
 {
     public Guid PartId { get; set; }
 
-    public string PartName { get; set; } = null!;
+    public string PurchasePrice { get; set; } = null!;
 
     public decimal PartPrice { get; set; }
 

@@ -25,6 +25,8 @@ public static class DependencyInjections
         services.AddScoped<IPartRepository, PartRepository>();
         services.AddScoped<IVendorRepository, VendorRepository>();
         services.AddScoped<IServiceAppointmentRepository, ServiceAppointmentRepository>();
+        services.AddScoped<IPurchaseInvoiceRepository, PurchaseInvoiceRepository>();
+        services.AddScoped<IPurchaseInvoiceItemRepository, PurchaseInvoiceItemRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IForgotPasswordRequestRepository, ForgotPasswordRequestRepository>();
 
@@ -38,6 +40,7 @@ public static class DependencyInjections
         services.AddScoped<IVendorService, VendorService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IServiceAppointmentService, ServiceAppointmentService>();
+        services.AddScoped<IPurchaseInvoiceService, PurchaseInvoiceService>();
         services.AddScoped<IReviewService, ReviewService>();
 
         return services;

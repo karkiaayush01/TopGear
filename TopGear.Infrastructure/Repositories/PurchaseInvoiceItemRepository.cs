@@ -4,6 +4,6 @@ using TopGear.Infrastructure.Data;
 
 namespace TopGear.Infrastructure.Repositories;
 
-public class VendorRepository(AppDbContext context): RepositoryBase<Vendor>(context), IVendorRepository 
+public class PurchaseInvoiceItemRepository(AppDbContext context): RepositoryBase<PurchaseInvoiceItem>(context), IPurchaseInvoiceItemRepository
 {
 }

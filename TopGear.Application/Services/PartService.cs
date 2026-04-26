@@ -23,7 +23,7 @@ public class PartService: IPartService
         return parts.Select(p => new PartDTO
         {
             PartId = p.PartId,
-            PartName = p.PartName,
+            PurchasePrice = p.PartName,
             PartPrice = p.PurchasePrice,
             SellingPrice = p.SellingPrice,
             Quantity = p.Quantity,
@@ -50,7 +50,7 @@ public class PartService: IPartService
         return new PartDTO
         {
             PartId = part.PartId,
-            PartName = part.PartName,
+            PurchasePrice = part.PartName,
             PartPrice = part.PurchasePrice,
             SellingPrice = part.SellingPrice,
             Quantity = part.Quantity,
@@ -91,7 +91,7 @@ public class PartService: IPartService
             return new PartDTO
             {
                 PartId = newPart.PartId,
-                PartName = newPart.PartName,
+                PurchasePrice = newPart.PartName,
                 PartPrice = newPart.PurchasePrice,
                 SellingPrice = newPart.SellingPrice,
                 Quantity = newPart.Quantity,
@@ -136,7 +136,7 @@ public class PartService: IPartService
         return new PartDTO
         {
             PartId = part.PartId,
-            PartName = part.PartName,
+            PurchasePrice = part.PartName,
             PartPrice = part.PurchasePrice,
             SellingPrice = part.SellingPrice,
             VendorId = part.VendorId,
