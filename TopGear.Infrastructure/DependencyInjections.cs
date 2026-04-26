@@ -20,6 +20,7 @@ public static class DependencyInjections
         services.AddScoped<IPartRepository, PartRepository>();
         services.AddScoped<IVendorRepository, VendorRepository>();
         services.AddScoped<IServiceAppointmentRepository, ServiceAppointmentRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
 
         //services injections
         services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -28,6 +29,7 @@ public static class DependencyInjections
         services.AddScoped<IVendorService, VendorService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IServiceAppointmentService, ServiceAppointmentService>();
+        services.AddScoped<IReviewService, ReviewService>();
 
         return services;
     }
