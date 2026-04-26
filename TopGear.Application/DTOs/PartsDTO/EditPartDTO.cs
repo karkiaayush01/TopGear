@@ -8,6 +8,8 @@ public class EditPartDTO
 
     public decimal? PartPrice { get; set; }
 
+    public decimal? SellingPrice { get; set; }
+
     public Guid? VendorId { get; set; }
 
     public string? Description { get; set; }

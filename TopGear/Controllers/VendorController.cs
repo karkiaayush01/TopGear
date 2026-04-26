@@ -1,0 +1,78 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TopGear.Application.DTOs.VendorDTO;
+using TopGear.Application.Interfaces;
+
+namespace TopGear.Controllers;
+
+[ApiController]
+[Route("api/vendor")]
+public class VendorController : ControllerBase
+{
+    public readonly IVendorService _vendorService;
+
+    public VendorController(IVendorService vendorService)
+    {
+        _vendorService = vendorService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllVendors()
+    {
+        var vendors = await _vendorService.GetVendorAsync();
+        return Ok(vendors);
+    }
+
+    [Authorize]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetVendorById(Guid id)
+    {
+        var vendor = await _vendorService.GetVendorByIdAsync(id);
+
+        if (vendor == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(vendor);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<IActionResult> CreateVendor([FromBody] CreateVendorDTO vendorCreateDTO)
+    {
+        var createdVendor = await _vendorService.CreateVendorAsync(vendorCreateDTO);
+
+        return CreatedAtAction(nameof(GetVendorById),
+            new { id = createdVendor.VendorId },
+            createdVendor);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateVendor(Guid id, [FromBody] EditVendorDTO vendorUpdateDTO)
+    {
+        var updatedVendor = await _vendorService.UpdateVendorAsync(id, vendorUpdateDTO);
+
+        if (updatedVendor == null)
+        {
+            throw new KeyNotFoundException();
+        }
+
+        return Ok(updatedVendor);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteVendor(Guid id)
+    {
+        var success = await _vendorService.DeleteVendorAsync(id);
+
+        if (!success)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+}

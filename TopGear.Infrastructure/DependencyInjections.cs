@@ -18,11 +18,13 @@ public static class DependencyInjections
 
         //repository injections
         services.AddScoped<IPartRepository, PartRepository>();
+        services.AddScoped<IVendorRepository, VendorRepository>();
 
         //services injections
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPartService, PartService>();
+        services.AddScoped<IVendorService, VendorService>();
 
         return services;
     }
