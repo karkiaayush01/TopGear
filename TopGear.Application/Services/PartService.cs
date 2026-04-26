@@ -5,18 +5,20 @@ using TopGear.Domain.Entities;
 
 namespace TopGear.Application.Services;
 
-public class PartService(IPartRepository repository) : IPartService
+public class PartService: IPartService
 {
+    private readonly IPartRepository _repository;
     private readonly ILogger<PartService> _logger;
-    public PartService(IPartRepository repository, ILogger<PartService> logger) : this(repository)
+    public PartService(IPartRepository repository, ILogger<PartService> logger) 
     {
+        _repository = repository;
         _logger = logger;
     }
     public async Task<IEnumerable<PartDTO>> GetPartsAsync()
     {
         _logger.LogInformation("Fetching all parts");
 
-        var parts = await repository.FindAllAsync();
+        var parts = await _repository.FindAllAsync();
 
         return parts.Select(p => new PartDTO
         {
@@ -36,7 +38,7 @@ public class PartService(IPartRepository repository) : IPartService
     {
         _logger.LogInformation("Fetching part with ID: {PartId}", id);
 
-        var part = await repository.GetByIdAsync(id);
+        var part = await _repository.GetByIdAsync(id);
 
         if (part == null)
         {
@@ -78,8 +80,8 @@ public class PartService(IPartRepository repository) : IPartService
                 UpdatedAt = DateTime.UtcNow
             };
 
-            repository.Create(newPart);
-            await repository.SaveChangesAsync();
+            _repository.Create(newPart);
+            await _repository.SaveChangesAsync();
 
             _logger.LogInformation("Part created successfully with ID: {PartId}", newPart.PartId);
 
@@ -106,7 +108,7 @@ public class PartService(IPartRepository repository) : IPartService
     {
         _logger.LogInformation("Updating part with ID: {PartId}", id);
 
-        var part = await repository.GetByIdAsync(id);
+        var part = await _repository.GetByIdAsync(id);
 
         if (part == null)
         {
@@ -122,8 +124,8 @@ public class PartService(IPartRepository repository) : IPartService
         part.ImageUrl = string.IsNullOrWhiteSpace(dto.ImageUrl) ? part.ImageUrl : dto.ImageUrl;
         part.UpdatedAt = DateTime.UtcNow;
 
-        repository.Update(part);
-        await repository.SaveChangesAsync();
+        _repository.Update(part);
+        await _repository.SaveChangesAsync();
 
         _logger.LogInformation("Part updated successfully with ID: {PartId}", id);
 
@@ -142,7 +144,7 @@ public class PartService(IPartRepository repository) : IPartService
     {
         _logger.LogInformation("Deleting part with ID: {PartId}", id);
 
-        var part = await repository.GetByIdAsync(id);
+        var part = await _repository.GetByIdAsync(id);
 
         if (part == null)
         {
@@ -150,8 +152,8 @@ public class PartService(IPartRepository repository) : IPartService
             return false;
         }
 
-        repository.Delete(part);
-        await repository.SaveChangesAsync();
+        _repository.Delete(part);
+        await _repository.SaveChangesAsync();
 
         _logger.LogInformation("Part deleted successfully with ID: {PartId}", id);
 
