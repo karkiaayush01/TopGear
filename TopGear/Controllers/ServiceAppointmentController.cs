@@ -17,7 +17,9 @@ public class ServiceAppointmentController : ControllerBase
         _appointmentService = appointmentService;
     }
 
-    // only admin and staff can see all appointments
+    /// <summary>
+    /// Get all appointments
+    /// </summary>
     [Authorize(Roles = "Admin,Staff")]
     [HttpGet]
     public async Task<IActionResult> GetAllAppointments()
@@ -26,6 +28,9 @@ public class ServiceAppointmentController : ControllerBase
         return Ok(appointments);
     }
 
+    /// <summary>
+    /// Get appointment by ID
+    /// </summary>
     [Authorize]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetAppointmentById(Guid id)
@@ -40,7 +45,9 @@ public class ServiceAppointmentController : ControllerBase
         return Ok(appointment);
     }
 
-    // customers can look up all their own appointments by their user id
+    /// <summary>
+    /// Get customer appointments
+    /// </summary>
     [Authorize]
     [HttpGet("customer/{customerId:guid}")]
     public async Task<IActionResult> GetAppointmentsByCustomer(Guid customerId)
@@ -49,6 +56,9 @@ public class ServiceAppointmentController : ControllerBase
         return Ok(appointments);
     }
 
+    /// <summary>
+    /// Create appointment
+    /// </summary>
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentDTO dto)
@@ -57,7 +67,9 @@ public class ServiceAppointmentController : ControllerBase
         return CreatedAtAction(nameof(GetAppointmentById), new { id = created.AppointmentId }, created);
     }
 
-    // only admin and staff can update appointment status or reschedule
+    /// <summary>
+    /// Update appointment
+    /// </summary>
     [Authorize(Roles = "Admin,Staff")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdateAppointment(Guid id, [FromBody] UpdateAppointmentDTO dto)
@@ -72,7 +84,9 @@ public class ServiceAppointmentController : ControllerBase
         return Ok(updated);
     }
 
-    // customers can cancel their own appointment using their user id from the jwt token
+    /// <summary>
+    /// Cancel appointment
+    /// </summary>
     [Authorize]
     [HttpDelete("{id:guid}/cancel")]
     public async Task<IActionResult> CancelAppointment(Guid id)
@@ -88,6 +102,9 @@ public class ServiceAppointmentController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Delete appointment
+    /// </summary>
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteAppointment(Guid id)
