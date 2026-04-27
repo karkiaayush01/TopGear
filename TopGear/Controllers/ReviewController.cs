@@ -17,6 +17,9 @@ public class ReviewController : ControllerBase
         _reviewService = reviewService;
     }
 
+    /// <summary>
+    /// Get all reviews
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetAllReviews()
     {
@@ -24,6 +27,9 @@ public class ReviewController : ControllerBase
         return Ok(reviews);
     }
 
+    /// <summary>
+    /// Get review by ID
+    /// </summary>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetReviewById(Guid id)
     {
@@ -37,7 +43,9 @@ public class ReviewController : ControllerBase
         return Ok(review);
     }
 
-    // get all reviews for a specific part
+    /// <summary>
+    /// Get reviews by part
+    /// </summary>
     [HttpGet("part/{partId:guid}")]
     public async Task<IActionResult> GetReviewsByPart(Guid partId)
     {
@@ -45,7 +53,9 @@ public class ReviewController : ControllerBase
         return Ok(reviews);
     }
 
-    // get all reviews for a specific service appointment
+    /// <summary>
+    /// Get reviews by appointment
+    /// </summary>
     [HttpGet("appointment/{appointmentId:guid}")]
     public async Task<IActionResult> GetReviewsByAppointment(Guid appointmentId)
     {
@@ -53,7 +63,9 @@ public class ReviewController : ControllerBase
         return Ok(reviews);
     }
 
-    // get all reviews made by a specific customer
+    /// <summary>
+    /// Get reviews by customer
+    /// </summary>
     [Authorize]
     [HttpGet("customer/{customerId:guid}")]
     public async Task<IActionResult> GetReviewsByCustomer(Guid customerId)
@@ -62,7 +74,9 @@ public class ReviewController : ControllerBase
         return Ok(reviews);
     }
 
-    // authenticated user creates a review, their id is taken from the jwt token
+    /// <summary>
+    /// Create review
+    /// </summary>
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateReview([FromBody] CreateReviewDTO dto)
@@ -72,7 +86,9 @@ public class ReviewController : ControllerBase
         return CreatedAtAction(nameof(GetReviewById), new { id = created.ReviewId }, created);
     }
 
-    // only the owner can edit their review
+    /// <summary>
+    /// Edit review
+    /// </summary>
     [Authorize]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> EditReview(Guid id, [FromBody] EditReviewDTO dto)
@@ -88,7 +104,9 @@ public class ReviewController : ControllerBase
         return Ok(updated);
     }
 
-    // owner can delete their own review, admin can delete any review
+    /// <summary>
+    /// Delete review
+    /// </summary>
     [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteReview(Guid id)
