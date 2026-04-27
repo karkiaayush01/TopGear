@@ -40,6 +40,7 @@ public class StaffController: ControllerBase
     /// Deactivate a staff account.
     /// </summary>
     [Authorize(Roles = "Admin")]
+    [HttpPatch]
     public async Task<IActionResult> DeactivateStaff(Guid staffId)
     {
         await _staffService.DeactivateStaff(staffId);
@@ -52,6 +53,7 @@ public class StaffController: ControllerBase
     /// Soft-delete a staff account
     /// </summary>
     [Authorize(Roles = "Admin")]
+    [HttpDelete]
     public async Task<IActionResult> DeleteStaff(Guid staffId)
     {
         await _staffService.DeleteStaff(staffId);
