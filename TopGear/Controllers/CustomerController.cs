@@ -11,12 +11,13 @@ namespace TopGear.Controllers
     public class CustomerController(ICustomerService customerService) : ControllerBase
     {
         [Authorize(Roles = "Admin,Staff")]
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Create(CreateCustomerRequest request)
         {
             var result = await customerService.CreateAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
+
         [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id:guid}")]
         public async Task<ActionResult> GetById(Guid id)
@@ -24,6 +25,7 @@ namespace TopGear.Controllers
             var result = await customerService.GetByIdAsync(id);
             return Ok(result);
         }
+
         [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateCustomerRequest request)
@@ -31,6 +33,7 @@ namespace TopGear.Controllers
             await customerService.UpdateAsync(id, request);
             return NoContent();
         }
+
         [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Deactivate(Guid id)

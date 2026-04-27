@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.OpenApi;
 using Serilog;
+using Serilog.Events;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 using TopGear.Domain.Entities;
 using TopGear.Infrastructure;
 using TopGear.Infrastructure.Auth;
@@ -37,6 +39,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 
     options.OperationFilter<AuthorizeOperationFilter>();
+
+    /*
+     * Generate XML Documentation for API 
+     * Referred: https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio
+    */
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 
@@ -48,11 +57,12 @@ builder.Services.AddOptions<JwtOptions>()
 
 // Exception Handler
 builder.Services.AddScoped<GlobalExceptionHandler>();
+builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthorizationMiddlewareResultHandler>();
 
 builder.Services.AddDataProtection();
 
 builder.Services
-    .AddIdentityCore<User>()
+    .AddIdentityCore<User>(options => options.User.RequireUniqueEmail = true) // Require unique email per user. Since we are sending emails, it has to be unique per user
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
@@ -87,6 +97,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Logging configuration: Log using Serilog
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
     .WriteTo.Console(outputTemplate:
         "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
     .WriteTo.Debug(outputTemplate:

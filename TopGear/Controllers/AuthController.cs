@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TopGear.Application.DTOs.EmailDTO;
-using TopGear.Application.DTOs.UserDTO;
 using TopGear.Application.DTOs.ForgotPasswordDTO;
-using TopGear.Application.Utils;
+using TopGear.Application.DTOs.UserDTO;
 using TopGear.Application.Interfaces;
+using TopGear.Application.Utils;
 
 namespace TopGear.Controllers;
 
@@ -54,6 +54,7 @@ public class AuthController : ControllerBase
 
         return Ok(response);
     }
+
 
     /// <summary>
     /// Send Forgot Password Email

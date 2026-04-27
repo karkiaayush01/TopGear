@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using TopGear.Application.DTOs.UserDTO;
 using TopGear.Application.Interfaces;
 using TopGear.Domain.Entities;
+using TopGear.Domain.Enums;
 
 namespace TopGear.Application.Services;
 
@@ -22,7 +23,7 @@ public class AuthService: IAuthService
 
     public async Task<Guid> CreateAccount(RegisterDTO data, string role)
     {
-        _logger.LogInformation("Creating user object");
+        _logger.LogInformation("Creating new user object");
 
         var user = new User
         {
@@ -30,10 +31,11 @@ public class AuthService: IAuthService
             LastName = data.LastName,
             UserName = data.Email,
             Email = data.Email,
-            PhoneNumber = data.PhoneNumber
+            PhoneNumber = data.PhoneNumber,
+            Status = UserAccountStatus.Active
         };
 
-        _logger.LogInformation("Adding user with User Manager");
+        _logger.LogInformation("Adding {rule} {email} with User Manager", role, user.Email);
 
         var result = await _userManager.CreateAsync(user, data.Password);
 
