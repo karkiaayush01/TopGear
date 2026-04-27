@@ -2,6 +2,7 @@
 using TopGear.Application.DTOs.CustomerDTO;
 using TopGear.Application.Interfaces;
 using TopGear.Domain.Entities;
+using TopGear.Domain.Enums;
 
 namespace TopGear.Application.Services;
 
@@ -15,7 +16,8 @@ public class CustomerService(UserManager<User> userManager) : ICustomerService
             LastName = request.LastName,
             Email = request.Email,
             UserName = request.Email,
-            PhoneNumber = request.Phone
+            PhoneNumber = request.Phone,
+            Status = UserAccountStatus.Active
         };
 
         var result = await userManager.CreateAsync(user, request.Password);
