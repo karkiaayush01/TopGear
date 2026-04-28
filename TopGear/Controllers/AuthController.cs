@@ -71,13 +71,7 @@ public class AuthController : ControllerBase
         {
             var request = await _forgotPasswordService.CreateRequest(email);
 
-            await _emailService.SendMailAsync(new SendEmailDTO
-            {
-                Recipients = new List<string> { email },
-                Subject = "Your Forgot Password Request",
-                Body = $"Your code is {request.VerificationCode}",
-                IsHtml = false
-            });
+            await _emailService.SendForgotPasswordEmail(email, request.VerificationCode);
         }
 
         return Ok(new

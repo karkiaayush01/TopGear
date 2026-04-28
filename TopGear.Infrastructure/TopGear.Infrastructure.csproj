@@ -22,4 +22,10 @@
     <ProjectReference Include="..\TopGear.Application\TopGear.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Email/Templates/ForgotPassword.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</Content>
+  </ItemGroup>
+
 </Project>

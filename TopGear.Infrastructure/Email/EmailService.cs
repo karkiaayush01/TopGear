@@ -26,7 +26,20 @@ public class EmailService: IEmailService
         _emailSender = settings.Email;
     }
 
-    public async Task SendMailAsync(SendEmailDTO data)
+    public async Task SendForgotPasswordEmail(string recipientEmail, string verificationCode)
+    {
+        string emailBody = BuildForgotPasswordEmail(verificationCode);
+
+        await SendMailAsync(new SendEmailDTO
+        {
+            Recipients = new List<string> { recipientEmail },
+            Subject = "Your Forgot Password Request",
+            Body = emailBody,
+            IsHtml = true
+        });
+    }
+
+    private async Task SendMailAsync(SendEmailDTO data)
     {
         var message = new MailMessage {
             From = new MailAddress(_emailSender, "TopGear"),
@@ -41,5 +54,17 @@ public class EmailService: IEmailService
         }
 
         await _client.SendMailAsync(message);
+    }
+
+    /// <summary>
+    /// Build a forgot password email using the verification code and email template
+    /// </summary>
+    /// <param name="code">Generated verification code</param>
+    /// <returns>The html document after updating with verification code</returns>
+    private string BuildForgotPasswordEmail(string code)
+    {
+        var path = Path.Combine(AppContext.BaseDirectory, "Email", "Templates", "ForgotPassword.html");
+        var html = File.ReadAllText(path);
+        return html.Replace("{{VERIFICATION_CODE}}", code);
     }
 }
