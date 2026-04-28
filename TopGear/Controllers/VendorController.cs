@@ -16,6 +16,9 @@ public class VendorController : ControllerBase
         _vendorService = vendorService;
     }
 
+    /// <summary>
+    /// Retrieve all vendors
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetAllVendors()
     {
@@ -23,6 +26,9 @@ public class VendorController : ControllerBase
         return Ok(vendors);
     }
 
+    /// <summary>
+    /// Retrieve a vendor by ID 
+    /// </summary>
     [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetVendorById(Guid id)
@@ -37,6 +43,10 @@ public class VendorController : ControllerBase
         return Ok(vendor);
     }
 
+    /// <summary>
+    /// Create a new vendor
+    /// </summary>
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreateVendor([FromBody] CreateVendorDTO vendorCreateDTO)
@@ -48,6 +58,9 @@ public class VendorController : ControllerBase
             createdVendor);
     }
 
+    /// <summary>
+    /// Update vendor details
+    /// </summary>
     [Authorize(Roles = "Admin")]
     [HttpPatch("{id}")]
     public async Task<IActionResult> UpdateVendor(Guid id, [FromBody] EditVendorDTO vendorUpdateDTO)
@@ -61,6 +74,10 @@ public class VendorController : ControllerBase
 
         return Ok(updatedVendor);
     }
+
+    /// <summary>
+    /// Delete a vendor (Admin only)
+    /// </summary>
 
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]

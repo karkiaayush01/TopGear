@@ -17,6 +17,9 @@ public class PurchaseInvoiceController : ControllerBase
     }
 
 
+    /// <summary>
+    /// Retrieve all purchase invoices 
+    /// </summary>
     [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAllInvoices()
@@ -25,7 +28,9 @@ public class PurchaseInvoiceController : ControllerBase
         return Ok(invoices);
     }
 
-
+    /// <summary>
+    /// Retrieve all purchase invoices
+    /// </summary>
     [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetInvoiceById(Guid id)
@@ -40,6 +45,9 @@ public class PurchaseInvoiceController : ControllerBase
         return Ok(invoice);
     }
 
+    /// <summary>
+    /// Create a new purchase invoice
+    /// </summary>
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreateInvoice([FromBody] CreatePurchaseInvoiceDTO dto)
@@ -52,6 +60,9 @@ public class PurchaseInvoiceController : ControllerBase
     }
 
 
+    /// <summary>
+    /// Delete a purchase invoice 
+    /// </summary>
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteInvoice(Guid id)
