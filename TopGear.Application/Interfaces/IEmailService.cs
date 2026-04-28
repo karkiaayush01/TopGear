@@ -4,5 +4,5 @@ namespace TopGear.Application.Interfaces;
 
 public interface IEmailService
 {
-    Task SendMailAsync(SendEmailDTO data);
+    Task SendForgotPasswordEmail(string email, string verificationCode);
 }
