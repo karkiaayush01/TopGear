@@ -8,6 +8,8 @@ public class PurchaseInvoiceItem
     public Guid PurchaseInvoiceItemId { get; set; } = Guid.NewGuid();
 
     public Guid PurchaseInvoiceId { get; set; }
+
+    [ForeignKey(nameof(PurchaseInvoiceId))]
     public PurchaseInvoice PurchaseInvoice { get; set; } = null!;
 
     public Guid PartId { get; set; }
@@ -20,5 +22,4 @@ public class PurchaseInvoiceItem
 
     [Required]
     public decimal UnitPrice { get; set; }
-
 }
