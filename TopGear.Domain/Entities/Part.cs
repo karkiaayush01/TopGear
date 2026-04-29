@@ -33,9 +33,4 @@ public class Part
 
     [ForeignKey(nameof(VendorId))]
     public Vendor Vendor { get; set; } = null!;
-
-    //Purchase Price, Selling Price
-
-
-    //Invoice ma partid Unit price() Quantity, Vendor Detail
 }
