@@ -5,6 +5,7 @@ using TopGear.Application.DTOs.ForgotPasswordDTO;
 using TopGear.Application.DTOs.UserDTO;
 using TopGear.Application.Interfaces;
 using TopGear.Application.Utils;
+using TopGear.Domain.Entities;
 
 namespace TopGear.Controllers;
 
@@ -92,4 +93,19 @@ public class AuthController : ControllerBase
         return Ok("Password Reset Successfully");
     }
 
+    /// <summary>
+    /// Get information of the logged in user from the token.
+    /// </summary>
+    [Authorize]
+    [HttpGet("user/me")]
+    public async Task<IActionResult> GetAuthenticatedUserData()
+    {
+        var userId = User.FindFirst("sub")?.Value;
+
+        if (userId == null) return BadRequest("Could not get userId. Please login first");
+
+        var userData = await _authService.GetAuthenticatedUserData(userId);
+
+        return Ok(userData);
+    }
 }

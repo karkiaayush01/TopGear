@@ -1,4 +1,6 @@
-﻿namespace TopGear.Middleware;
+﻿using TopGear.Application.CustomExceptions;
+
+namespace TopGear.Middleware;
 
 public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger): IMiddleware
 {
@@ -23,7 +25,9 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger): IMi
         int statusCode = ex switch
         {
             ArgumentException => StatusCodes.Status400BadRequest,
+            BadRequestException => StatusCodes.Status400BadRequest,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+            NotFoundException => StatusCodes.Status404NotFound,
             KeyNotFoundException => StatusCodes.Status404NotFound,
             _ => StatusCodes.Status500InternalServerError
         };
