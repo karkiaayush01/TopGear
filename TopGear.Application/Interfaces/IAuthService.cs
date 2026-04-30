@@ -4,7 +4,9 @@ namespace TopGear.Application.Interfaces;
 
 public interface IAuthService
 {
-    public Task<Guid> CreateAccount(RegisterDTO data, string role);
+    Task<Guid> CreateAccount(RegisterDTO data, string role);
 
-    public Task<LoginResponseDTO?> Login(LoginDTO data);
+    Task<LoginResponseDTO?> Login(LoginDTO data);
+
+    Task<UserDTO> GetAuthenticatedUserData(string userId);
 }

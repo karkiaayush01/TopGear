@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
+using TopGear.Application.CustomExceptions;
 using TopGear.Application.DTOs.UserDTO;
 using TopGear.Application.Interfaces;
 using TopGear.Domain.Entities;
@@ -82,6 +82,22 @@ public class AuthService: IAuthService
             UserId = user.Id,
             Email = user.Email ?? "",
             Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault() ?? ""
+        };
+    }
+
+    public async Task<UserDTO> GetAuthenticatedUserData(string userId)
+    {
+        User? user = await _userManager.FindByIdAsync(userId);
+
+        // While passing error, don't let user know, user doesn't exist.
+        if (user == null) throw new BadRequestException("An error occurred.");
+
+        return new UserDTO
+        {
+            UserId = user.Id,
+            FullName = $"{user.FirstName} {user.LastName}",
+            Email = user.Email ?? string.Empty,
+            PhoneNumber = user.PhoneNumber
         };
     }
 }
