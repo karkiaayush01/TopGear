@@ -10,4 +10,8 @@
     <ProjectReference Include="..\TopGear.Domain\TopGear.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
+  </ItemGroup>
+
 </Project>

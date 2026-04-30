@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CloudinaryDotNet;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TopGear.Application.Interfaces;
@@ -7,6 +8,7 @@ using TopGear.Infrastructure.Config;
 using TopGear.Infrastructure.Data;
 using TopGear.Infrastructure.Email;
 using TopGear.Infrastructure.Repositories;
+using TopGear.Infrastructure.Storage;
 
 namespace TopGear.Infrastructure;
 
@@ -20,6 +22,20 @@ public static class DependencyInjections
 
         // Email Service
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+
+        // Cloudinary
+        var cloudinaryConfig = configuration.GetSection("Cloudinary");
+        services.AddSingleton(s =>
+        {
+            var account = new Account(
+                cloudinaryConfig["CloudName"],
+                cloudinaryConfig["APIKey"],
+                cloudinaryConfig["APISecret"]
+            );
+
+            return new Cloudinary(account);
+        });
+        services.AddScoped<IImageUploadService, CloudinaryImageUploadService>();
 
         //repository injections
         services.AddScoped<IPartRepository, PartRepository>();
