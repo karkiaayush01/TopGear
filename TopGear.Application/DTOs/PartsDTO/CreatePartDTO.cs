@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TopGear.Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace TopGear.Application.DTOs.PartsDTO;
 
@@ -25,7 +26,7 @@ public class CreatePartDTO
 
     public VehicleType VehicleType { get; set; }
 
+    // Pass optional image instead of url
     [Required]
-    public string ImageUrl { get; set; } = null!;
-
+    public IFormFile? PartImage { get; set; }
 }

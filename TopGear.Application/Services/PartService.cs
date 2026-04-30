@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
 using TopGear.Application.DTOs.PartsDTO;
 using TopGear.Application.Interfaces;
 using TopGear.Domain.Entities;
@@ -8,11 +9,13 @@ namespace TopGear.Application.Services;
 public class PartService: IPartService
 {
     private readonly IPartRepository _repository;
+    private readonly IImageUploadService _imageUploadService;
     private readonly ILogger<PartService> _logger;
-    public PartService(IPartRepository repository, ILogger<PartService> logger) 
+    public PartService(IPartRepository repository, ILogger<PartService> logger, IImageUploadService imageUploadService) 
     {
         _repository = repository;
         _logger = logger;
+        _imageUploadService = imageUploadService;
     }
     public async Task<IEnumerable<PartDTO>> GetPartsAsync()
     {
@@ -66,6 +69,22 @@ public class PartService: IPartService
     {
         try
         {
+            _logger.LogInformation("Checking if part has image");
+
+            string partImageUrl = "";
+            if (dto.PartImage != null)
+            {
+                _logger.LogInformation("Image found, uploading to cloud storage");
+
+                using var stream = dto.PartImage.OpenReadStream();
+
+                partImageUrl = await _imageUploadService.UploadAsync(
+                    stream,
+                    dto.PartImage.FileName,
+                    "TopGear/Parts"
+                );
+            }
+
             _logger.LogInformation("Creating new part: {PartName}", dto.PartName);
 
             var newPart = new Part
@@ -77,7 +96,7 @@ public class PartService: IPartService
                 VendorId = dto.VendorId,
                 Description = dto.Description,
                 VehicleType = dto.VehicleType,
-                ImageUrl = dto.ImageUrl,
+                ImageUrl = partImageUrl,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow

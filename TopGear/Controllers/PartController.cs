@@ -47,7 +47,7 @@ public class PartController : ControllerBase
     /// </summary>
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> CreatePart([FromBody] CreatePartDTO partCreateDTO)
+    public async Task<IActionResult> CreatePart([FromForm] CreatePartDTO partCreateDTO)
     {
         var createdPart = await _partService.CreatePartAsync(partCreateDTO);
         return CreatedAtAction(nameof(GetPartById), new { id = createdPart.PartId }, createdPart);
