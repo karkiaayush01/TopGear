@@ -37,4 +37,21 @@ public class PurchaseInvoiceRepository(AppDbContext context)
             ? await query.AsNoTracking().ToListAsync()
             : await query.ToListAsync();
     }
+
+    public async Task<List<PurchaseInvoice>> GetForReportAsync(DateTime? from, DateTime? to)
+    {
+        var query = Context.PurchaseInvoices
+            .Include(x => x.Vendor)
+            .Include(x => x.Items)
+                .ThenInclude(i => i.Part)
+            .AsNoTracking();
+
+        if (from.HasValue)
+            query = query.Where(x => x.InvoiceDate >= from.Value);
+
+        if (to.HasValue)
+            query = query.Where(x => x.InvoiceDate <= to.Value);
+
+        return await query.ToListAsync();
+    }
 }
