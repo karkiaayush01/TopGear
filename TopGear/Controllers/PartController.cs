@@ -27,6 +27,17 @@ public class PartController : ControllerBase
         return Ok(parts);
 
     }
+
+    /// <summary>
+    /// Search parts with pagination and optional filters. Default limit is 20.
+    /// </summary>
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchParts([FromQuery] PartSearchQueryDTO query)
+    {
+        var parts = await _partService.SearchPartsAsync(query);
+        return Ok(parts);
+    }
+
     /// <summary>
     /// Get part by id
     /// </summary>
