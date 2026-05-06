@@ -38,6 +38,26 @@ public class PartService: IPartService
         });
     }
 
+    public async Task<PagedPartsResponseDTO> SearchPartsAsync(PartSearchQueryDTO query)
+    {
+        query.Limit = query.Limit < 1 ? 20 : query.Limit;
+
+        _logger.LogInformation(
+            "Searching parts with limit {Limit}",
+            query.Limit);
+
+        var (parts, totalCount) = await _repository.SearchPartsAsync(query);
+
+        return new PagedPartsResponseDTO
+        {
+            Items = parts.Select(MapToDto),
+            Page = 1,
+            Limit = query.Limit,
+            TotalCount = totalCount,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)query.Limit)
+        };
+    }
+
     public async Task<PartDTO> GetPartByIdAsync(Guid id)
     {
         _logger.LogInformation("Fetching part with ID: {PartId}", id);
@@ -182,5 +202,22 @@ public class PartService: IPartService
         _logger.LogInformation("Part deleted successfully with ID: {PartId}", id);
 
         return true;
+    }
+
+    private static PartDTO MapToDto(Part part)
+    {
+        return new PartDTO
+        {
+            PartId = part.PartId,
+            PurchasePrice = part.PartName,
+            PartPrice = part.PurchasePrice,
+            SellingPrice = part.SellingPrice,
+            Quantity = part.Quantity,
+            VendorId = part.VendorId,
+            VendorName = part.Vendor?.VendorName ?? "",
+            Description = part.Description,
+            VehicleType = part.VehicleType,
+            ImageUrl = part.ImageUrl
+        };
     }
 }
