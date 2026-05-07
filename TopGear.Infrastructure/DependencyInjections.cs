@@ -45,6 +45,7 @@ public static class DependencyInjections
         services.AddScoped<IPurchaseInvoiceItemRepository, PurchaseInvoiceItemRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IForgotPasswordRequestRepository, ForgotPasswordRequestRepository>();
+        services.AddScoped<IPartRequestRepository, PartRequestRepository>();
 
         //services injections
         services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -60,6 +61,7 @@ public static class DependencyInjections
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<IReportService, ReportService>();
+        services.AddScoped<IPartRequestService, PartRequestService>();
 
         return services;
     }

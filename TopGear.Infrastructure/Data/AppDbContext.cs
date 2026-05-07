@@ -15,6 +15,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): IdentityDbCon
     public DbSet<ServiceAppointment> ServiceAppointments { get; set; } = null!;
     public DbSet<Review> Reviews { get; set; } = null!;
     public DbSet<ForgotPasswordRequest> ForgotPasswordRequests { get; set; } = null!;
+    public DbSet<PartRequest> PartRequests { get; set; } = null!;
 
 
     protected override void OnModelCreating(ModelBuilder builder)
