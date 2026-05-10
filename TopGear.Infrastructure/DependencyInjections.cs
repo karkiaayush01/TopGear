@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TopGear.Application.Interfaces;
 using TopGear.Application.Services;
+using TopGear.Infrastructure.BackgroundServices;
 using TopGear.Infrastructure.Config;
 using TopGear.Infrastructure.Data;
 using TopGear.Infrastructure.Email;
@@ -45,6 +46,9 @@ public static class DependencyInjections
         services.AddScoped<IPurchaseInvoiceItemRepository, PurchaseInvoiceItemRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IForgotPasswordRequestRepository, ForgotPasswordRequestRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<IPartSaleRepository, PartSaleRepository>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IPartRequestRepository, PartRequestRepository>();
 
         //services injections
@@ -62,6 +66,13 @@ public static class DependencyInjections
         services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IPartRequestService, PartRequestService>();
+        services.AddScoped<IVehicleService, VehicleService>();
+        services.AddScoped<IPartSaleService, PartSaleService>();
+
+        // Notification settings + background workers
+        services.Configure<NotificationSettings>(configuration.GetSection(NotificationSettings.SectionName));
+        services.AddHostedService<LowStockNotificationWorker>();
+        services.AddHostedService<OverdueCreditReminderWorker>();
 
         return services;
     }

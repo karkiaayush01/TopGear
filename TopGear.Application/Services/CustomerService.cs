@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using TopGear.Application.DTOs.Common;
 using TopGear.Application.DTOs.CustomerDTO;
 using TopGear.Application.Interfaces;
 using TopGear.Domain.Entities;
@@ -6,7 +7,7 @@ using TopGear.Domain.Enums;
 
 namespace TopGear.Application.Services;
 
-public class CustomerService(UserManager<User> userManager) : ICustomerService
+public class CustomerService(UserManager<User> userManager, ICustomerRepository customerRepository) : ICustomerService
 {
     public async Task<CustomerResponse> CreateAsync(CreateCustomerRequest request)
     {
@@ -64,6 +65,11 @@ public class CustomerService(UserManager<User> userManager) : ICustomerService
         user.LockoutEnd = DateTimeOffset.MaxValue;
 
         await userManager.UpdateAsync(user);
+    }
+
+    public async Task<PagedResult<CustomerResponse>> SearchAsync(CustomerSearchParams parameters)
+    {
+        return await customerRepository.SearchAsync(parameters);
     }
 
     private static CustomerResponse MapToResponse(User user) => new()

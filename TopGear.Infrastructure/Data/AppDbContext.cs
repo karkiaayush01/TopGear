@@ -15,6 +15,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): IdentityDbCon
     public DbSet<ServiceAppointment> ServiceAppointments { get; set; } = null!;
     public DbSet<Review> Reviews { get; set; } = null!;
     public DbSet<ForgotPasswordRequest> ForgotPasswordRequests { get; set; } = null!;
+    public DbSet<Vehicle> Vehicles { get; set; } = null!;
+    public DbSet<PartSale> PartSales { get; set; } = null!;
+    public DbSet<PartSaleItem> PartSaleItems { get; set; } = null!;
     public DbSet<PartRequest> PartRequests { get; set; } = null!;
 
 

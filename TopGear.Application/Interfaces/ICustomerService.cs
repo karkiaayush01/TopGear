@@ -1,5 +1,5 @@
-﻿using TopGear.Application.DTOs.CustomerDTO;
-
+﻿using TopGear.Application.DTOs.Common;
+using TopGear.Application.DTOs.CustomerDTO;
 
 namespace TopGear.Application.Interfaces
 {
@@ -9,5 +9,6 @@ namespace TopGear.Application.Interfaces
         Task<CustomerResponse> GetByIdAsync(Guid id);
         Task UpdateAsync(Guid id, UpdateCustomerRequest request);
         Task DeactivateAsync(Guid id);
+        Task<PagedResult<CustomerResponse>> SearchAsync(CustomerSearchParams parameters);
     }
 }
