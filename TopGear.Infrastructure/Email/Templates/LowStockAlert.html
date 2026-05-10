@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Low Stock Alert – TopGear</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f0f0f0; font-family:Arial, sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f0f0f0;">
+        <tr>
+            <td align="center" style="padding: 40px 16px;">
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0"
+                       style="max-width:600px; width:100%; background-color:#ffffff; border-radius:4px; overflow:hidden; box-shadow: 0 2px 24px rgba(0,0,0,0.10);">
+
+                    <tr><td style="background-color:#FFB300; height:6px; font-size:0; line-height:0;">&nbsp;</td></tr>
+
+                    <tr>
+                        <td align="center" style="padding: 36px 48px 24px; background-color:#ffffff; border-bottom: 1px solid #f0f0f0;">
+                            <img src="https://raw.githubusercontent.com/karkiaayush01/TopGear-UI/refs/heads/main/public/logo/TopGear-light.png"
+                                 alt="TopGear" width="150" style="display:block; max-width:150px; height:auto;" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="center" style="padding: 28px 48px 8px;">
+                            <h1 style="margin:0; font-size:22px; font-weight:700; color:#111111;">⚠️ Low Stock Alert</h1>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 12px 48px 8px;">
+                            <p style="margin:0; font-size:14px; color:#555555; line-height:1.7;">
+                                The following parts have fallen below the minimum stock threshold and require attention.
+                                Checked at: <strong>{{CHECKED_AT}}</strong>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 16px 48px 32px;">
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                                   style="border: 1px solid #e0e0e0; border-radius:4px; overflow:hidden;">
+                                <thead>
+                                    <tr style="background-color:#FFB300;">
+                                        <th style="padding:10px 12px; text-align:left; font-size:13px; color:#ffffff; font-weight:700;">Part Name</th>
+                                        <th style="padding:10px 12px; text-align:center; font-size:13px; color:#ffffff; font-weight:700;">Stock Left</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size:13px; color:#333333;">
+                                    {{PARTS_TABLE}}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr><td style="background-color:#FFB300; height:4px; font-size:0; line-height:0;">&nbsp;</td></tr>
+
+                    <tr>
+                        <td align="center" style="padding: 22px 48px; background-color:#fafafa; border-top: 1px solid #eeeeee;">
+                            <p style="margin:0; font-size:11px; color:#aaaaaa; text-align:center;">
+                                © 2025 TopGear. This is an automated notification — do not reply.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
