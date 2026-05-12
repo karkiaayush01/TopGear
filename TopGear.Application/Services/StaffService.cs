@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using TopGear.Application.DTOs.UserDTO;
 using TopGear.Application.Interfaces;
 using TopGear.Domain.Entities;
 using TopGear.Domain.Enums;
@@ -15,6 +16,32 @@ public class StaffService : IStaffService
     {
         _userManager = userManager;
         _logger = logger;
+    }
+
+    public async Task<IEnumerable<StaffDTO>> GetAllStaff(bool includeDeleted = false)
+    {
+        _logger.LogInformation("Listing staff (includeDeleted={includeDeleted})", includeDeleted);
+
+        var staffUsers = await _userManager.GetUsersInRoleAsync("Staff");
+
+        var filtered = includeDeleted
+            ? staffUsers
+            : staffUsers.Where(u => u.Status != UserAccountStatus.Deleted);
+
+        return filtered
+            .OrderBy(u => u.FirstName)
+            .ThenBy(u => u.LastName)
+            .Select(u => new StaffDTO
+            {
+                UserId = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                FullName = $"{u.FirstName} {u.LastName}".Trim(),
+                Email = u.Email ?? string.Empty,
+                PhoneNumber = u.PhoneNumber,
+                Status = u.Status,
+            })
+            .ToList();
     }
 
     public async Task DeactivateStaff(Guid staffId)
