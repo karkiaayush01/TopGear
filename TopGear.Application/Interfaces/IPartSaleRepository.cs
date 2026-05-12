@@ -6,4 +6,6 @@ public interface IPartSaleRepository : IRepositoryBase<PartSale>
 {
     Task<PartSale?> GetByIdWithDetailsAsync(Guid saleId);
     Task<List<PartSale>> GetByCustomerIdAsync(Guid customerId);
+    Task<List<PartSale>> GetAllWithDetailsAsync();
+    Task<List<PartSale>> GetSalesForReportAsync(DateTime? from, DateTime? to);
 }
