@@ -19,18 +19,24 @@ namespace TopGear.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Admin,Staff,Customer")]
         [HttpGet("{id:guid}")]
         public async Task<ActionResult> GetById(Guid id)
         {
+            if (!CanAccessCustomerData(id))
+                return Forbid();
+
             var result = await customerService.GetByIdAsync(id);
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin,Staff")]
+        [Authorize(Roles = "Admin,Staff,Customer")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateCustomerRequest request)
         {
+            if (!CanAccessCustomerData(id))
+                return Forbid();
+
             await customerService.UpdateAsync(id, request);
             return NoContent();
         }
