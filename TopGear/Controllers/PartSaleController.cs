@@ -44,6 +44,17 @@ public class PartSaleController(IPartSaleService partSaleService) : ControllerBa
     }
 
     /// <summary>
+    /// Get all sales.
+    /// </summary>
+    [Authorize(Roles = "Admin,Staff")]
+    [HttpGet]
+    public async Task<IActionResult> GetAllSales()
+    {
+        var sales = await partSaleService.GetAllSalesAsync();
+        return Ok(sales);
+    }
+
+    /// <summary>
     /// Get a sale by ID.
     /// </summary>
     [Authorize(Roles = "Admin,Staff")]
@@ -61,6 +72,18 @@ public class PartSaleController(IPartSaleService partSaleService) : ControllerBa
     [HttpGet("customer/{customerId:guid}")]
     public async Task<IActionResult> GetSalesByCustomer(Guid customerId)
     {
+        var sales = await partSaleService.GetSalesByCustomerAsync(customerId);
+        return Ok(sales);
+    }
+
+    /// <summary>
+    /// Get the authenticated customer's sales history.
+    /// </summary>
+    [Authorize(Roles = "Customer")]
+    [HttpGet("mine")]
+    public async Task<IActionResult> GetMySales()
+    {
+        var customerId = GetCurrentUserId();
         var sales = await partSaleService.GetSalesByCustomerAsync(customerId);
         return Ok(sales);
     }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TopGear.Application.DTOs.UserDTO;
 using TopGear.Application.Interfaces;
@@ -8,7 +7,7 @@ namespace TopGear.Controllers;
 
 [ApiController]
 [Route("api/staff")]
-public class StaffController: ControllerBase
+public class StaffController : ControllerBase
 {
     private readonly IAuthService _authService;
     private readonly IStaffService _staffService;
@@ -21,10 +20,21 @@ public class StaffController: ControllerBase
 
 
     /// <summary>
+    /// List all staff. Requires admin privileges.
+    /// </summary>
+    [Authorize(Roles = "Admin")]
+    [HttpGet]
+    public async Task<IActionResult> GetAllStaff([FromQuery] bool includeDeleted = false)
+    {
+        var staff = await _staffService.GetAllStaff(includeDeleted);
+        return Ok(staff);
+    }
+
+    /// <summary>
     /// Register a staff. Requires admin previleges
     /// </summary>
     [Authorize(Roles = "Admin")]
-    [HttpPost("/register")]
+    [HttpPost("register")]
     public async Task<IActionResult> RegisterStaff(RegisterDTO request)
     {
         Guid userId = await _authService.CreateAccount(request, "Staff");
@@ -40,13 +50,12 @@ public class StaffController: ControllerBase
     /// Deactivate a staff account.
     /// </summary>
     [Authorize(Roles = "Admin")]
-    [HttpPatch]
+    [HttpPatch("{staffId:guid}/deactivate")]
     public async Task<IActionResult> DeactivateStaff(Guid staffId)
     {
         await _staffService.DeactivateStaff(staffId);
 
-        // Return Ok directly. If there's any issue, services will throw an exception
-        return Ok("The account has been deactivated successfully");
+        return Ok(new { Message = "The account has been deactivated successfully" });
     }
 
     /// <summary>
@@ -65,11 +74,11 @@ public class StaffController: ControllerBase
     /// Soft-delete a staff account
     /// </summary>
     [Authorize(Roles = "Admin")]
-    [HttpDelete]
+    [HttpDelete("{staffId:guid}")]
     public async Task<IActionResult> DeleteStaff(Guid staffId)
     {
         await _staffService.DeleteStaff(staffId);
 
-        return Ok("Staff has been deleted");
+        return Ok(new { Message = "Staff has been deleted" });
     }
 }

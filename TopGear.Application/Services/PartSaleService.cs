@@ -87,6 +87,12 @@ public class PartSaleService(
         return sales.Select(MapToDTO).ToList();
     }
 
+    public async Task<List<PartSaleDTO>> GetAllSalesAsync()
+    {
+        var sales = await saleRepository.GetAllWithDetailsAsync();
+        return sales.Select(MapToDTO).ToList();
+    }
+
     public async Task<PartSaleDTO> MarkAsPaidAsync(Guid saleId)
     {
         var sale = await saleRepository.GetByIdWithDetailsAsync(saleId)
