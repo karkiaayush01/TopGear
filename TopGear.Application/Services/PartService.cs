@@ -26,7 +26,7 @@ public class PartService: IPartService
         return parts.Select(p => new PartDTO
         {
             PartId = p.PartId,
-            PurchasePrice = p.PartName,
+            PartName = p.PartName,
             PartPrice = p.PurchasePrice,
             SellingPrice = p.SellingPrice,
             Quantity = p.Quantity,
@@ -73,7 +73,7 @@ public class PartService: IPartService
         return new PartDTO
         {
             PartId = part.PartId,
-            PurchasePrice = part.PartName,
+            PartName = part.PartName,
             PartPrice = part.PurchasePrice,
             SellingPrice = part.SellingPrice,
             Quantity = part.Quantity,
@@ -130,7 +130,7 @@ public class PartService: IPartService
             return new PartDTO
             {
                 PartId = newPart.PartId,
-                PurchasePrice = newPart.PartName,
+                PartName = newPart.PartName,
                 PartPrice = newPart.PurchasePrice,
                 SellingPrice = newPart.SellingPrice,
                 Quantity = newPart.Quantity,
@@ -175,7 +175,7 @@ public class PartService: IPartService
         return new PartDTO
         {
             PartId = part.PartId,
-            PurchasePrice = part.PartName,
+            PartName = part.PartName,
             PartPrice = part.PurchasePrice,
             SellingPrice = part.SellingPrice,
             VendorId = part.VendorId,
@@ -196,10 +196,13 @@ public class PartService: IPartService
             return false;
         }
 
-        _repository.Delete(part);
+        part.IsDeleted = true;
+        part.UpdatedAt = DateTime.UtcNow;
+
+        _repository.Update(part);
         await _repository.SaveChangesAsync();
 
-        _logger.LogInformation("Part deleted successfully with ID: {PartId}", id);
+        _logger.LogInformation("Part soft-deleted successfully with ID: {PartId}", id);
 
         return true;
     }
@@ -209,7 +212,7 @@ public class PartService: IPartService
         return new PartDTO
         {
             PartId = part.PartId,
-            PurchasePrice = part.PartName,
+            PartName = part.PartName,
             PartPrice = part.PurchasePrice,
             SellingPrice = part.SellingPrice,
             Quantity = part.Quantity,

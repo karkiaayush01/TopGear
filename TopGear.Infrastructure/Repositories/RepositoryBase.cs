@@ -14,7 +14,7 @@ public class RepositoryBase<T>(AppDbContext context) : IRepositoryBase<T> where 
             ? Context.Set<T>().AsNoTracking()
             : Context.Set<T>();
 
-    public async Task<List<T>> FindAllAsync(bool trackChanges = false) =>
+    public virtual async Task<List<T>> FindAllAsync(bool trackChanges = false) =>
         !trackChanges
             ? await Context.Set<T>().AsNoTracking().ToListAsync()
             : await Context.Set<T>().ToListAsync();
@@ -27,7 +27,7 @@ public class RepositoryBase<T>(AppDbContext context) : IRepositoryBase<T> where 
     public T? GetById(Guid id) => Context.Set<T>().Find(id);
 
 
-    public async Task<T?> GetByIdAsync(Guid id) => await Context.Set<T>().FindAsync(id);
+    public virtual async Task<T?> GetByIdAsync(Guid id) => await Context.Set<T>().FindAsync(id);
 
     public async Task<bool> GetExistenceAsync(Expression<Func<T, bool>> expression) => await Context.Set<T>().AnyAsync(expression);
 

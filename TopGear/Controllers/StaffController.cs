@@ -50,6 +50,18 @@ public class StaffController: ControllerBase
     }
 
     /// <summary>
+    /// Reactivate a deactivated staff account.
+    /// </summary>
+    [Authorize(Roles = "Admin")]
+    [HttpPatch("{staffId:guid}/activate")]
+    public async Task<IActionResult> ActivateStaff(Guid staffId)
+    {
+        await _staffService.ActivateStaff(staffId);
+
+        return Ok(new { Message = "The account has been activated successfully" });
+    }
+
+    /// <summary>
     /// Soft-delete a staff account
     /// </summary>
     [Authorize(Roles = "Admin")]

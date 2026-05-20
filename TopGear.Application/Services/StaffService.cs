@@ -39,6 +39,29 @@ public class StaffService : IStaffService
         }
     }
 
+    public async Task ActivateStaff(Guid staffId)
+    {
+        _logger.LogInformation("Activating staff account with id {staffId}", staffId);
+
+        User? staff = await _userManager.FindByIdAsync(staffId.ToString()) ?? throw new KeyNotFoundException("Staff not found");
+        if (staff.Status == UserAccountStatus.Active) throw new ArgumentException("This account is already active");
+        if (staff.Status == UserAccountStatus.Deleted) throw new ArgumentException("Cannot activate a deleted account");
+
+        var staffRole = (await _userManager.GetRolesAsync(staff)).FirstOrDefault();
+        if (staffRole != "Staff") throw new ArgumentException("Not a staff account");
+
+        staff.Status = UserAccountStatus.Active;
+
+        _logger.LogInformation("Updating staff account status");
+        var result = await _userManager.UpdateAsync(staff);
+
+        if (!result.Succeeded)
+        {
+            _logger.LogError("An error occurred while updating staff status");
+            throw new Exception("Failed to update staff status");
+        }
+    }
+
     public async Task DeleteStaff(Guid staffId)
     {
         _logger.LogInformation("Deleting staff account with id {staffId}", staffId);

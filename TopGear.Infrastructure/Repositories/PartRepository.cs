@@ -8,11 +8,27 @@ namespace TopGear.Infrastructure.Repositories;
 
 public class PartRepository(AppDbContext context): RepositoryBase<Part>(context), IPartRepository
 {
+    public override async Task<List<Part>> FindAllAsync(bool trackChanges = false)
+    {
+        var query = Context.Set<Part>()
+            .Include(p => p.Vendor)
+            .Where(p => !p.IsDeleted);
+        return trackChanges
+            ? await query.ToListAsync()
+            : await query.AsNoTracking().ToListAsync();
+    }
+
+    public override async Task<Part?> GetByIdAsync(Guid id) =>
+        await Context.Set<Part>()
+            .Include(p => p.Vendor)
+            .FirstOrDefaultAsync(p => p.PartId == id && !p.IsDeleted);
+
     public async Task<(List<Part> Parts, int TotalCount)> SearchPartsAsync(PartSearchQueryDTO query)
     {
         var partsQuery = Context.Set<Part>()
             .Include(p => p.Vendor)
             .AsNoTracking()
+            .Where(p => !p.IsDeleted)
             .AsQueryable();
 
         var searchTerm = string.IsNullOrWhiteSpace(query.Search) ? query.Q : query.Search;
